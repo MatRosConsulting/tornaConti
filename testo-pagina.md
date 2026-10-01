@@ -63,7 +63,7 @@ Campi: email, nome, azienda, ruolo, fatturato, canali (multipla), transazioni/me
 - Link informativa privacy
 - Ragione sociale, P. IVA e contatti nel footer
 - Testo sicurezza dati (FAQ)
-- Data beta, se confermata
+- Data beta: prevista gennaio/febbraio 2027 (indicativa)
 
 ## Eventi di tracciamento (dataLayer, e gtag se presente)
 `cta_click` (con `cta_location`), `form_start`, `form_submit`, `scroll_75`, più `share_click` e `ab_variant`.

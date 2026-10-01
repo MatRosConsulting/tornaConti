@@ -85,7 +85,11 @@ fieldset{border:0;padding:0;margin:0 0 6px}
 legend{font-weight:700;padding:0;margin-bottom:8px;font-size:.95rem}
 label.f{display:block;font-weight:600;font-size:.95rem;margin-bottom:14px}
 label.f span.opt{font-weight:400;color:var(--muted)}
-input[type=text],input[type=email],select,textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;font:inherit;border:1px solid #B9C3D8;border-radius:9px;background:#fff;color:var(--ink)}
+div.f{margin-bottom:14px}
+div.f>label{display:block;font-weight:600;font-size:.95rem}
+.tel{display:grid;grid-template-columns:130px 1fr;gap:10px}
+.tel select,.tel input{margin-top:6px}
+input[type=text],input[type=email],input[type=tel],select,textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;font:inherit;border:1px solid #B9C3D8;border-radius:9px;background:#fff;color:var(--ink)}
 textarea{min-height:90px;resize:vertical}
 .row{display:grid;gap:0 16px;grid-template-columns:1fr 1fr}
 .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
@@ -241,7 +245,7 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
       <div class="card"><h3>Condizioni riservate</h3><p>Condizioni dedicate agli iscritti, in definizione.</p></div>
       <div class="card"><h3>Peso sulle funzioni</h3><p>Le risposte al modulo e le chiacchierate orientano ciò che costruiamo per primo.</p></div>
     </div>
-    <p class="note"><span class="todo">[DA COMPLETARE]</span> Eventuale data prevista per la beta, da inserire solo se confermata.</p>
+    <p class="note">Beta prevista tra gennaio e febbraio 2027.</p>
   </div>
 </section>
 
@@ -253,7 +257,7 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
     <details><summary>I miei dati sono al sicuro?</summary><p>È la prima domanda che ci fanno ed è giusto. Il sito e i dati sono gestiti su infrastrutture con server nell'Unione Europea (Aruba ed eventualmente Railway). Oggi il modulo raccoglie solo i dati che vedi, trattati come indicato nell'<button type="button" class="linkbtn" data-privacy>informativa privacy</button>. Le misure di sicurezza del prodotto saranno descritte in modo preciso prima della beta.</p></details>
     <details><summary>Si integra con la mia banca e con il mio gestionale?</summary><p>L'obiettivo è collegare conti bancari, gateway e marketplace e produrre un export per il gestionale. Le integrazioni disponibili alla beta dipendono anche dalle risposte che raccogliamo. Per questo ti chiediamo quali canali usi.</p></details>
     <details><summary>E il mio commercialista?</summary><p>TornaConti non lo sostituisce. Gli consegna una quadratura già spiegata, con un export pronto, così le sue domande trovano risposta senza riaprire estratti conto.</p></details>
-    <details><summary>Quanto tempo serve per partire?</summary><p>Non abbiamo ancora una data certa per la beta. Gli iscritti saranno avvisati per primi. Non promettiamo tempi che non possiamo garantire.</p></details>
+    <details><summary>Quanto tempo serve per partire?</summary><p>La beta è prevista tra gennaio e febbraio 2027. È una data indicativa e non una promessa: gli iscritti saranno avvisati per primi, e per ogni cambiamento di programma.</p></details>
     <details><summary>Quanto costerà?</summary><p>Il prezzo è in definizione. Chi è in lista avrà condizioni riservate, e ne parliamo insieme prima che tu prenda qualsiasi impegno.</p></details>
     <details><summary>Iscrivermi mi impegna a qualcosa?</summary><p>No. È una lista d'attesa. Puoi chiedere la cancellazione in qualsiasi momento.</p></details>
   </div>
@@ -277,6 +281,25 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
           <label class="f">Azienda *<input type="text" name="azienda" required autocomplete="organization"></label>
         </div>
         <label class="f">Ruolo *<input type="text" name="ruolo" required autocomplete="organization-title" placeholder="Es. CFO, titolare, responsabile amministrativo"></label>
+
+        <div class="f">
+          <label for="tel">Cellulare *</label>
+          <div class="tel">
+            <select name="prefisso" id="prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+              <option value="+39" selected>🇮🇹 +39</option>
+              <option value="+41">🇨🇭 +41</option><option value="+378">🇸🇲 +378</option><option value="+379">🇻🇦 +379</option>
+              <option value="+33">🇫🇷 +33</option><option value="+49">🇩🇪 +49</option><option value="+34">🇪🇸 +34</option>
+              <option value="+351">🇵🇹 +351</option><option value="+43">🇦🇹 +43</option><option value="+32">🇧🇪 +32</option>
+              <option value="+31">🇳🇱 +31</option><option value="+352">🇱🇺 +352</option><option value="+44">🇬🇧 +44</option>
+              <option value="+353">🇮🇪 +353</option><option value="+30">🇬🇷 +30</option><option value="+386">🇸🇮 +386</option>
+              <option value="+385">🇭🇷 +385</option><option value="+356">🇲🇹 +356</option><option value="+48">🇵🇱 +48</option>
+              <option value="+40">🇷🇴 +40</option><option value="+46">🇸🇪 +46</option><option value="+45">🇩🇰 +45</option>
+              <option value="+47">🇳🇴 +47</option><option value="+358">🇫🇮 +358</option><option value="+1">🇺🇸 +1</option>
+              <option value="+971">🇦🇪 +971</option><option value="+91">🇮🇳 +91</option><option value="+86">🇨🇳 +86</option>
+            </select>
+            <input type="tel" name="telefono" id="tel" required inputmode="tel" autocomplete="tel-national" placeholder="333 1234567">
+          </div>
+        </div>
 
         <hr class="sep">
 
@@ -372,7 +395,7 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
     <p>Matteo Rossi, via Roma 140, 27028 San Martino Siccomario (PV), P. IVA 02164040186.<br>Contatto per ogni richiesta sui dati personali: <a href="mailto:info@matrosconsulting.com">info@matrosconsulting.com</a>.</p>
 
     <h3>2. Quali dati raccogliamo</h3>
-    <p>I dati che inserisci nel modulo: email aziendale, nome, azienda, ruolo, fascia di fatturato, canali di incasso, volume di transazioni, modalità e ore dedicate alla riconciliazione, valutazione del problema (1–5), eventuale testo libero e disponibilità a una chiacchierata. Registriamo inoltre data e ora dell'iscrizione e la pagina di provenienza.</p>
+    <p>I dati che inserisci nel modulo: email aziendale, nome, azienda, ruolo, numero di cellulare, fascia di fatturato, canali di incasso, volume di transazioni, modalità e ore dedicate alla riconciliazione, valutazione del problema (1–5), eventuale testo libero e disponibilità a una chiacchierata. Registriamo inoltre data e ora dell'iscrizione e la pagina di provenienza.</p>
     <p>Non ti chiediamo dati bancari né dati particolari. Ti invitiamo a non inserirli nel campo libero.</p>
 
     <h3>3. Perché li usiamo e su quale base</h3>
@@ -451,12 +474,15 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('Inserisci un indirizzo email valido.');
     var req = ['nome','azienda','ruolo','fatturato','transazioni','chi','ore','metodo'];
     for (var i=0;i<req.length;i++) if(!(d.get(req[i])||'').trim()) return fail('Completa tutti i campi obbligatori (*).');
+    var tel = (d.get('telefono')||'').replace(/[\s.\-()]/g,'');
+    if (!/^\d{6,12}$/.test(tel)) return fail('Inserisci un numero di cellulare valido (solo cifre, senza prefisso).');
     if (!d.getAll('canali').length) return fail('Seleziona almeno un canale di incasso.');
     if (!d.get('gravita')) return fail('Indica da 1 a 5 quanto è un problema per voi.');
     if (!form.privacy.checked) return fail('Il consenso privacy è obbligatorio.');
 
     var payload = {
       email:email, nome:d.get('nome'), azienda:d.get('azienda'), ruolo:d.get('ruolo'),
+      telefono:d.get('prefisso') + ' ' + tel,
       fatturato:d.get('fatturato'), canali:d.getAll('canali'), transazioni:d.get('transazioni'),
       chi_riconcilia:d.get('chi'), ore_mese:d.get('ore'), metodo:d.get('metodo'),
       gravita:Number(d.get('gravita')), fastidio:d.get('fastidio')||'',

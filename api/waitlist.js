@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
 
   const rows = [
     ['Email', email], ['Nome', str(b.nome, 100)], ['Azienda', str(b.azienda, 150)], ['Ruolo', str(b.ruolo, 100)],
+    ['Cellulare', str(b.telefono, 30)],
     ['Fatturato', str(b.fatturato, 50)],
     ['Canali di incasso', Array.isArray(b.canali) ? b.canali.slice(0, 12).map((c) => str(c, 30)).join(', ') : ''],
     ['Transazioni/mese', str(b.transazioni, 50)], ['Chi riconcilia', str(b.chi_riconcilia, 60)],
