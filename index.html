@@ -105,6 +105,8 @@ textarea{min-height:90px;resize:vertical}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;margin-bottom:12px}
 .chk input{margin-top:5px;accent-color:var(--blue)}
 .hp{position:absolute;left:-9999px}
+input.invalid,select.invalid,textarea.invalid{border-color:#B42318;background:#FEF3F2;box-shadow:0 0 0 3px rgba(180,35,24,.15)}
+fieldset.invalid,.chk.invalid{outline:2px solid #B42318;outline-offset:6px;border-radius:9px;background:#FEF3F2}
 .err{color:#B42318;font-size:.9rem;margin-top:10px;display:none}
 hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}
 .thanks{display:none;text-align:center;padding:20px 0}
@@ -466,19 +468,44 @@ footer{padding:36px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
   // Invio
   var err = document.getElementById('err'), btn = document.getElementById('send');
   function fail(m){ err.textContent = m; err.style.display = 'block'; }
+  // Validazione formale email: parte locale (max 64, niente punti iniziali/finali/doppi), dominio a etichette (max 63, niente trattini ai bordi), TLD di sole lettere (min 2), max 254 totali.
+  function validEmail(e){
+    if (!e || e.length > 254) return false;
+    var at = e.lastIndexOf('@'); if (at < 1) return false;
+    var l = e.slice(0, at), d = e.slice(at + 1);
+    if (l.length > 64 || l[0] === '.' || l[l.length-1] === '.' || l.indexOf('..') >= 0) return false;
+    if (!/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+$/.test(l)) return false;
+    return /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/.test(d);
+  }
+  function clearInvalid(){ form.querySelectorAll('.invalid').forEach(function(n){ n.classList.remove('invalid'); n.removeAttribute('aria-invalid'); }); }
+  function unmark(e){
+    var t = e.target, g = t.closest('fieldset, .chk');
+    [t, g].forEach(function(n){ if (n) { n.classList.remove('invalid'); n.removeAttribute('aria-invalid'); } });
+  }
+  form.addEventListener('input', unmark);
+  form.addEventListener('change', unmark);
   form.addEventListener('submit', function(ev){
-    ev.preventDefault(); err.style.display = 'none';
+    ev.preventDefault(); err.style.display = 'none'; clearInvalid();
     if (form.website.value) return; // honeypot
-    var d = new FormData(form);
+    var d = new FormData(form), bad = [], msgs = [];
+    function flag(el, msg){ el.classList.add('invalid'); el.setAttribute('aria-invalid','true'); bad.push(el); msgs.push(msg); }
     var email = (d.get('email')||'').trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('Inserisci un indirizzo email valido.');
-    var req = ['nome','azienda','ruolo','fatturato','transazioni','chi','ore','metodo'];
-    for (var i=0;i<req.length;i++) if(!(d.get(req[i])||'').trim()) return fail('Completa tutti i campi obbligatori (*).');
+    if (!validEmail(email)) flag(form.email, 'Inserisci un indirizzo email valido (es. nome@azienda.it).');
+    ['nome','azienda','ruolo'].forEach(function(n){ if(!(d.get(n)||'').trim()) flag(form[n], 'Completa tutti i campi obbligatori (*).'); });
     var tel = (d.get('telefono')||'').replace(/[\s.\-()]/g,'');
-    if (!/^\d{6,12}$/.test(tel)) return fail('Inserisci un numero di cellulare valido (solo cifre, senza prefisso).');
-    if (!d.getAll('canali').length) return fail('Seleziona almeno un canale di incasso.');
-    if (!d.get('gravita')) return fail('Indica da 1 a 5 quanto è un problema per voi.');
-    if (!form.privacy.checked) return fail('Il consenso privacy è obbligatorio.');
+    if (!/^\d{6,12}$/.test(tel)) flag(form.telefono, 'Inserisci un numero di cellulare valido (solo cifre, senza prefisso).');
+    ['fatturato'].forEach(function(n){ if(!(d.get(n)||'').trim()) flag(form[n], 'Completa tutti i campi obbligatori (*).'); });
+    if (!d.getAll('canali').length) flag(document.getElementById('canali').closest('fieldset'), 'Seleziona almeno un canale di incasso.');
+    ['transazioni','chi','ore','metodo'].forEach(function(n){ if(!(d.get(n)||'').trim()) flag(form[n], 'Completa tutti i campi obbligatori (*).'); });
+    if (!d.get('gravita')) flag(form.querySelector('.scale').closest('fieldset'), 'Indica da 1 a 5 quanto è un problema per voi.');
+    if (!form.privacy.checked) flag(form.privacy.closest('.chk'), 'Il consenso privacy è obbligatorio.');
+    if (bad.length) {
+      fail(bad.length > 1 ? 'Completa tutti i campi obbligatori (*): ora sono evidenziati in rosso.' : msgs[0]);
+      var first = bad[0], f = first.matches('input, select, textarea') ? first : first.querySelector('input, select');
+      if (f) f.focus({preventScroll:true});
+      first.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
 
     var payload = {
       email:email, nome:d.get('nome'), azienda:d.get('azienda'), ruolo:d.get('ruolo'),

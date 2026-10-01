@@ -3,6 +3,16 @@
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const str = (v, max = 500) => String(v ?? '').trim().slice(0, max);
 
+// Stessa validazione formale usata nel modulo (index.html).
+const validEmail = (e) => {
+  if (!e || e.length > 254) return false;
+  const at = e.lastIndexOf('@'); if (at < 1) return false;
+  const l = e.slice(0, at), d = e.slice(at + 1);
+  if (l.length > 64 || l[0] === '.' || l[l.length - 1] === '.' || l.includes('..')) return false;
+  if (!/^[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+$/.test(l)) return false;
+  return /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/.test(d);
+};
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const key = process.env.RESEND_API_KEY;
@@ -10,7 +20,7 @@ module.exports = async (req, res) => {
 
   const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
   const email = str(b.email, 200);
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || b.consenso_privacy !== true)
+  if (!validEmail(email) || b.consenso_privacy !== true)
     return res.status(400).json({ error: 'Dati non validi' });
 
   const rows = [
